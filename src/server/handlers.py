@@ -9,6 +9,11 @@ def handle_help(update):
 
 
 
+def handle_unknown(update):
+    print("Unknown command")
+
+
+
 __handlers = {
     "help": handle_help
 }
