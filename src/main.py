@@ -10,7 +10,7 @@ __app = Flask(__name__)
 
 
 @__app.route("/", methods=["POST"])
-def hello_world():
+def main():
     update = request.get_json()
     if "message" in update:
         message = update["message"]
@@ -24,11 +24,11 @@ def hello_world():
 
 
 def setup():
-    if "SPYFALL_APIKEY" not in os.environ:
-        print("SPYFALL_APIKEY env variable has not been set")
+    if "API_KEY" not in os.environ:
+        print("API_KEY env variable has not been set")
         sys.exit(1)
 
-    telegram.init(os.environ["SPYFALL_APIKEY"])
+    telegram.init(os.environ["API_KEY"])
 
 
 setup()
