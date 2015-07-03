@@ -14,8 +14,17 @@ def handle_unknown(update):
 
 
 
+def handle_fuckyou():
+    telegram.send_message(
+        update["message"]["chat"]["id"],
+        "Fuck you too!"
+        )
+
+
+
 __handlers = {
-    "help": handle_help
+    "help": handle_help,
+    "fuckyou": handle_fuckyou
 }
 
 
