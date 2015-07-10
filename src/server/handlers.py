@@ -1,10 +1,29 @@
 from data import telegram
+from doc import filehandler
 
 
 def handle_help(update):
     telegram.send_message(
         update["message"]["chat"]["id"],
         "Halp iz hia"
+        )
+
+
+
+def handle_send(update):
+    pass #SEND IMAGE
+
+
+
+def handle_add(update):
+    pass #ADD IMAGE TO DB
+
+
+
+def handle_about(update):
+    telegram.send_message(
+        update["message"]["chat"]["id"],
+        filehandler.get_doc(filehandler.Document.about)
         )
 
 
@@ -24,6 +43,8 @@ def handle_fuckyou(update):
 
 __handlers = {
     "help": handle_help,
+    "about": handle_about,
+    "add": handle_add,
     "fuckyou": handle_fuckyou
 }
 

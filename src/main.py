@@ -2,6 +2,7 @@ from flask import Flask, request
 import sys
 import os
 import json
+import re
 
 from server import handlers
 from data import telegram
@@ -11,12 +12,15 @@ __app = Flask(__name__)
 
 @__app.route("/", methods=["POST"])
 def main():
+    pattern = re.compile("^[A-Za-z0-9]*.(jpg|jpeg|gif|png)$")
     update = request.get_json()
     if "message" in update:
         message = update["message"]
         if "text" in message:
             text = message["text"]
-            if text.startswith("/mm_"):
+            if pattern.match(text):
+                handlers.handle_send(update)
+            elif text.startswith("/mm_"):
                 text = text[4:]
                 handlers.handle(text, update)
 
