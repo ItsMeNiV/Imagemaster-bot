@@ -18,7 +18,7 @@ def connect_to_db():
                 host=url.hostname,
                 port=url.port
                 )
-        except Exception, e:
+        except Exception e:
             print("Can't connect to db")
 
 
