@@ -8,8 +8,8 @@ def connect_to_db():
     if "DB_NAME" not in os.environ and "DB_HOST" not in os.environ and "DB_USER" not in os.environ and "DB_PASS" not in os.environ:
         pass
     else:
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+        parse.uses_netloc.append("postgres")
+        url = parse.urlparse(os.environ["DATABASE_URL"])
         try:
             con = psycopg2.connect(
                 database=url.path[1:],
