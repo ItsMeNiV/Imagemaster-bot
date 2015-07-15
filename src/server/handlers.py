@@ -62,7 +62,9 @@ def handle_fuckyou(update):
 
 def handle_db_config(update):
     con = databasecon.connect_to_db()
-    query = "create table user(ID INT PRIMARY KEY NOT NULL, NAME TEXT NOT NULL); create table image(ID TEXT PRIMARY KEY NOT NULL, LINK TEXT NOT NULL, UPLOADED_BY INT NOT NULL references user(ID));"
+    query = "create table mm_user(ID INT PRIMARY KEY NOT NULL, NAME TEXT NOT NULL)"
+    cur.execute(query)
+    query = " create table mm_image(ID TEXT PRIMARY KEY NOT NULL, LINK TEXT NOT NULL, UPLOADED_BY INT NOT NULL references user(ID))"
     cur.execute(query)
 
 
