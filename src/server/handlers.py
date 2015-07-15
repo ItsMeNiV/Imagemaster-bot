@@ -60,11 +60,19 @@ def handle_fuckyou(update):
 
 
 
+def handle_db_config(update):
+    con = databasecon.connect_to_db()
+    query = "create table user(ID INT PRIMARY KEY NOT NULL, NAME TEXT NOT NULL); create table image(ID TEXT PRIMARY KEY NOT NULL, LINK TEXT NOT NULL, UPLOADED_BY INT NOT NULL references user(ID));"
+    cur.execute(query)
+
+
+
 __handlers = {
     "help": handle_help,
     "about": handle_about,
     "add": handle_add_image,
     "adduser": handle_add_user,
+    "dbconfig": handle_db_config,
     "fuckyou": handle_fuckyou
 }
 

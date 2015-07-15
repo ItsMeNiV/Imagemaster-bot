@@ -9,7 +9,7 @@ def connect_to_db():
         pass
     else:
         urllib.parse.uses_netloc.append("postgres")
-        url = urlparse.urlparse(os.environ["DATABASE_URL"])
+        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
         try:
             con = psycopg2.connect(
                 database=url.path[1:],
