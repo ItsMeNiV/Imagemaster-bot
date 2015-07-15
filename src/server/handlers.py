@@ -67,7 +67,7 @@ def handle_db_config(update):
     #cur.execute(query)
     #query = " create table mm_image(ID TEXT PRIMARY KEY NOT NULL, LINK TEXT NOT NULL, UPLOADED_BY INT NOT NULL references user(ID))"
     #cur.execute(query)
-    databasecon.disconnect_from_db(con)
+    databasecon.disconnect_from_db(con, update)
 
 
 

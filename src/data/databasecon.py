@@ -32,7 +32,7 @@ def connect_to_db(update):
 
 
 
-def disconnect_from_db(db_con):
+def disconnect_from_db(db_con, update):
     global __is_connected
     db_con.close()
     __is_connected = False
