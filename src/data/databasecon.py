@@ -1,6 +1,6 @@
 import psycopg2
 import os
-import urlparse
+from urllib import parse
 
 __is_connected = False
 
@@ -8,7 +8,7 @@ def connect_to_db():
     if "DB_NAME" not in os.environ and "DB_HOST" not in os.environ and "DB_USER" not in os.environ and "DB_PASS" not in os.environ:
         pass
     else:
-        urlparse.uses_netloc.append("postgres")
+        urllib.parse.uses_netloc.append("postgres")
         url = urlparse.urlparse(os.environ["DATABASE_URL"])
         try:
             con = psycopg2.connect(
