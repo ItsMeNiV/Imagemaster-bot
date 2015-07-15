@@ -44,11 +44,11 @@ def disconnect_from_db(db_con, update):
 
 def search_image(image_name, db_con):
     cur = db_con.cursor()
-    query = """select image_link from image where image_name=%s"""
+    query = """select link from mm_image where id=%s"""
     cur.execute(query, (image_name))
     result = cur.fetchone()
     if result != None:
-        image_link = result[0]
+        image_link = str(result[0])
         return image_link
     else:
         return "Not found"

@@ -13,9 +13,12 @@ def handle_help(update):
 
 
 def handle_send(update):
+    con = databasecon.connect_to_db()
+    link = databasecon.search_image(update["message"]["text"], con)
+    databasecon.disconnect_from_db(con, update)
     telegram.send_message(
         update["message"]["chat"]["id"],
-        "I'd send the requested image now.. If I could!"
+        link
         )
     #SEND IMAGE
 
@@ -60,22 +63,11 @@ def handle_fuckyou(update):
 
 
 
-def handle_db_config(update):
-    con = databasecon.connect_to_db(update)
-    #cur = con.cursor()
-    #cur.execute("CREATE TABLE mm_user(id INT PRIMARY KEY NOT NULL, name TEXT NOT NULL);")
-    #cur.execute("CREATE TABLE mm_image(id TEXT PRIMARY KEY NOT NULL, link TEXT NOT NULL, uploaded_by INT NOT NULL references user(id))")
-    #con.commit()
-    databasecon.disconnect_from_db(con, update)
-
-
-
 __handlers = {
     "help": handle_help,
     "about": handle_about,
     "add": handle_add_image,
     "adduser": handle_add_user,
-    "dbconfig": handle_db_config,
     "fuckyou": handle_fuckyou
 }
 
