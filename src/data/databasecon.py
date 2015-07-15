@@ -10,24 +10,27 @@ def connect_to_db(update):
     if "DATABASE_URL" not in os.environ or __is_connected == True:
         print("Environment-variable missing or already connected")
     else:
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        telegram.send_message(
-        update["message"]["chat"]["id"],
-        "Trying to connect to db")
-        con = psycopg2.connect(
-            database=url.path[1:],
-            user=url.username,
-            password=url.password,
-            host=url.hostname,
-            port=url.port
-            )
-        if con != None:
-            __is_connected = True
-        telegram.send_message(
-        update["message"]["chat"]["id"],
-        "DB-connection successful")
-        return con
+        try:
+            urllib.parse.uses_netloc.append("postgres")
+            url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+            telegram.send_message(
+            update["message"]["chat"]["id"],
+            "Trying to connect to db")
+            con = psycopg2.connect(
+                database=url.path[1:],
+                user=url.username,
+                password=url.password,
+                host=url.hostname,
+                port=url.port
+                )
+            if con != None:
+                __is_connected = True
+            telegram.send_message(
+            update["message"]["chat"]["id"],
+            "DB-connection successful")
+            return con
+        except:
+            print("Failed to connect to the db")
 
 
 
