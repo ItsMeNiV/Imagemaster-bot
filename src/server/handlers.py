@@ -32,7 +32,6 @@ def handle_add_image(update):
 
 
 def handle_add_user(update):
-    if update["message"]["from"]["id"] == os.environ["ADMIN_ID"]
     #con = databasecon.connect_to_db()
     #databasecon.add_user(update["message"]["from"]["id"],update["message"]["from"]["username"],con, update) #Need to parse id and name from text!
     #databasecon.disconnect_from_db(con)
