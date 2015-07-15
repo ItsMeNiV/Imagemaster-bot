@@ -8,25 +8,24 @@ def connect_to_db(update):
         print("Environment-variable missing")
     else:
         url = parse.urlparse(os.environ["DATABASE_URL"])
-        try:
-            telegram.send_message(
-            update["message"]["chat"]["id"],
-            "Trying to connect to db"
+        
+        telegram.send_message(
+        update["message"]["chat"]["id"],
+        "Trying to connect to db")
+
+        con = psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
             )
-            con = psycopg2.connect(
-                database=url.path[1:],
-                user=url.username,
-                password=url.password,
-                host=url.hostname,
-                port=url.port
-                )
-            telegram.send_message(
-            update["message"]["chat"]["id"],
-            "DB-connection succesful"
-            )
-            return con
-        except:
-            print("Can't connect to db")
+        
+        telegram.send_message(
+        update["message"]["chat"]["id"],
+        "DB-connection succesful")
+        
+        return con
 
 
 
