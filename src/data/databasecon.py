@@ -4,13 +4,17 @@ from urllib import parse
 
 __is_connected = False
 
-def connect_to_db():
+def connect_to_db(update):
     if "DATABASE_URL" not in os.environ:
         print("Environment-variable missing")
     else:
         parse.uses_netloc.append("postgres")
         url = parse.urlparse(os.environ["DATABASE_URL"])
         try:
+            telegram.send_message(
+        update["message"]["chat"]["id"],
+        "Trying to connect to db"
+        )
             con = psycopg2.connect(
                 database=url.path[1:],
                 user=url.username,
@@ -18,6 +22,10 @@ def connect_to_db():
                 host=url.hostname,
                 port=url.port
                 )
+            telegram.send_message(
+        update["message"]["chat"]["id"],
+        "DB-connection succesful"
+        )
         except:
             print("Can't connect to db")
 
