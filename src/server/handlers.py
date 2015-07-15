@@ -32,9 +32,9 @@ def handle_add_image(update):
 
 
 def handle_add_user(update):
-    con = databasecon.connect_to_db()
-    databasecon.add_user(update["message"]["from"]["id"],update["message"]["from"]["username"],con, update) #Need to parse id and name from text!
-    databasecon.disconnect_from_db(con)
+    #con = databasecon.connect_to_db()
+    #databasecon.add_user(update["message"]["from"]["id"],update["message"]["from"]["username"],con, update) #Need to parse id and name from text!
+    #databasecon.disconnect_from_db(con)
     pass #ADD USER TO DB
 
 
@@ -61,11 +61,12 @@ def handle_fuckyou(update):
 
 
 def handle_db_config(update):
-    con = databasecon.connect_to_db()
-    query = "create table mm_user(ID INT PRIMARY KEY NOT NULL, NAME TEXT NOT NULL)"
-    cur.execute(query)
-    query = " create table mm_image(ID TEXT PRIMARY KEY NOT NULL, LINK TEXT NOT NULL, UPLOADED_BY INT NOT NULL references user(ID))"
-    cur.execute(query)
+    #con = databasecon.connect_to_db()
+    #query = "create table mm_user(ID INT PRIMARY KEY NOT NULL, NAME TEXT NOT NULL)"
+    #cur.execute(query)
+    #query = " create table mm_image(ID TEXT PRIMARY KEY NOT NULL, LINK TEXT NOT NULL, UPLOADED_BY INT NOT NULL references user(ID))"
+    #cur.execute(query)
+    pass
 
 
 
