@@ -68,7 +68,7 @@ def add_user(user_id, user_name, db_con, update):
     if result == None:
         query = """insert into user values(%s, %s)"""
         cur.execute(query, (user_id, user_name))
-
+        print("User created!")
         db_con.commit()
     else:
         telegram.send_message(
