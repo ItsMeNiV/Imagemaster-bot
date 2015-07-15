@@ -7,7 +7,8 @@ def connect_to_db(update):
     if "DATABASE_URL" not in os.environ:
         print("Environment-variable missing")
     else:
-        url = parse.urlparse(os.environ["DATABASE_URL"])
+        urllib.parse.uses_netloc.append("postgres")
+        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
         
         telegram.send_message(
         update["message"]["chat"]["id"],
@@ -24,7 +25,7 @@ def connect_to_db(update):
         telegram.send_message(
         update["message"]["chat"]["id"],
         "DB-connection succesful")
-        
+
         return con
 
 
