@@ -24,9 +24,10 @@ def connect_to_db(update):
                 port=url.port
                 )
             telegram.send_message(
-        update["message"]["chat"]["id"],
-        "DB-connection succesful"
-        )
+            update["message"]["chat"]["id"],
+            "DB-connection succesful"
+            )
+            return con
         except:
             print("Can't connect to db")
 
