@@ -3,13 +3,10 @@ import os
 import urllib.parse
 from data import telegram
 
-__is_connected = False
-
 def connect_to_db(update):
     if "DATABASE_URL" not in os.environ:
         print("Environment-variable missing")
     else:
-        parse.uses_netloc.append("postgres")
         url = parse.urlparse(os.environ["DATABASE_URL"])
         try:
             telegram.send_message(
