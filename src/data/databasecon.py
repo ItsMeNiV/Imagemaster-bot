@@ -74,8 +74,8 @@ def add_image(image_link, image_name, user_id, update):
         telegram.send_message(
         update["message"]["chat"]["id"],
         "There's already an image with this name in the database"
-        disconnect_from_db(db_con)
         )
+        disconnect_from_db(db_con)
 
 
 
@@ -95,5 +95,5 @@ def add_user(user_id, user_name, update):
         telegram.send_message(
         update["message"]["chat"]["id"],
         "There's already a user with this id in the database"
-        disconnect_from_db(db_con)
         )
+        disconnect_from_db(db_con)
