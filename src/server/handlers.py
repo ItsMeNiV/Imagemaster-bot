@@ -32,6 +32,7 @@ def handle_add_image(update):
 
 
 def handle_add_user(update):
+    if update["message"]["from"]["id"] == os.environ["ADMIN_ID"]
     #con = databasecon.connect_to_db()
     #databasecon.add_user(update["message"]["from"]["id"],update["message"]["from"]["username"],con, update) #Need to parse id and name from text!
     #databasecon.disconnect_from_db(con)
@@ -63,10 +64,10 @@ def handle_fuckyou(update):
 def handle_db_config(update):
     try:
         con = databasecon.connect_to_db(update)
-        cur = con.cursor()
-        cur.execute("CREATE TABLE mm_user(id INT PRIMARY KEY NOT NULL, name TEXT NOT NULL);")
-        cur.execute("CREATE TABLE mm_image(id TEXT PRIMARY KEY NOT NULL, link TEXT NOT NULL, uploaded_by INT NOT NULL references user(id))")
-        con.commit()
+        #cur = con.cursor()
+        #cur.execute("CREATE TABLE mm_user(id INT PRIMARY KEY NOT NULL, name TEXT NOT NULL);")
+        #cur.execute("CREATE TABLE mm_image(id TEXT PRIMARY KEY NOT NULL, link TEXT NOT NULL, uploaded_by INT NOT NULL references user(id))")
+        #con.commit()
     except:
         if cur is not None:
             cur.rollback()
