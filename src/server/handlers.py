@@ -13,9 +13,7 @@ def handle_help(update):
 
 
 def handle_send(update):
-    #con = databasecon.connect_to_db(update)
-    #link = databasecon.search_image(update["message"]["text"], con)
-    #databasecon.disconnect_from_db(con, update)
+    #link = databasecon.search_image(update["message"]["text"], update)
     #telegram.send_message(
     #   update["message"]["chat"]["id"],
     #   link
@@ -26,19 +24,15 @@ def handle_send(update):
 
 
 def handle_add_image(update):
-    #con = databasecon.connect_to_db()
     name = "testname, please ignore" #Parse from text
     link = "testlink, please ignore" #Parse from text
-    #databasecon.add_image(link, name, update["message"]["from"]["id"],con, update)
-    #databasecon.disconnect_from_db(con)
+    #databasecon.add_image(link, name, update["message"]["from"]["id"], update)
     pass #ADD IMAGE TO DB
 
 
 
 def handle_add_user(update):
-    #con = databasecon.connect_to_db()
-    #databasecon.add_user(update["message"]["from"]["id"],update["message"]["from"]["username"],con, update) #Need to parse id and name from text!
-    #databasecon.disconnect_from_db(con)
+    #databasecon.add_user(update["message"]["from"]["id"],update["message"]["from"]["username"], update) #Need to parse id and name from text!
     pass #ADD USER TO DB
 
 
