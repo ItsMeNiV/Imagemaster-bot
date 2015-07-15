@@ -62,10 +62,10 @@ def handle_fuckyou(update):
 
 def handle_db_config(update):
     con = databasecon.connect_to_db(update)
-    cur = con.cursor()
-    cur.execute("CREATE TABLE mm_user(id INT PRIMARY KEY NOT NULL, name TEXT NOT NULL);")
-    cur.execute("CREATE TABLE mm_image(id TEXT PRIMARY KEY NOT NULL, link TEXT NOT NULL, uploaded_by INT NOT NULL references user(id))")
-    con.commit()
+    #cur = con.cursor()
+    #cur.execute("CREATE TABLE mm_user(id INT PRIMARY KEY NOT NULL, name TEXT NOT NULL);")
+    #cur.execute("CREATE TABLE mm_image(id TEXT PRIMARY KEY NOT NULL, link TEXT NOT NULL, uploaded_by INT NOT NULL references user(id))")
+    #con.commit()
     databasecon.disconnect_from_db(con, update)
 
 
