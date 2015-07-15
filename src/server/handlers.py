@@ -13,13 +13,14 @@ def handle_help(update):
 
 
 def handle_send(update):
-    con = databasecon.connect_to_db(update)
-    link = databasecon.search_image(update["message"]["text"], con)
-    databasecon.disconnect_from_db(con, update)
-    telegram.send_message(
-        update["message"]["chat"]["id"],
-        link
-        )
+    #con = databasecon.connect_to_db(update)
+    #link = databasecon.search_image(update["message"]["text"], con)
+    #databasecon.disconnect_from_db(con, update)
+    #telegram.send_message(
+    #   update["message"]["chat"]["id"],
+    #   link
+    #    )
+    pass
     #SEND IMAGE
 
 
