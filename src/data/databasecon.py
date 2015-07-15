@@ -3,17 +3,18 @@ import os
 import urllib.parse
 from data import telegram
 
+__is_connected = False
+
 def connect_to_db(update):
-    if "DATABASE_URL" not in os.environ:
-        print("Environment-variable missing")
+    global __is_connected
+    if "DATABASE_URL" not in os.environ or __is_connected == True:
+        print("Environment-variable missing or already connected")
     else:
         urllib.parse.uses_netloc.append("postgres")
         url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        
         telegram.send_message(
         update["message"]["chat"]["id"],
         "Trying to connect to db")
-
         con = psycopg2.connect(
             database=url.path[1:],
             user=url.username,
@@ -21,18 +22,20 @@ def connect_to_db(update):
             host=url.hostname,
             port=url.port
             )
-        
+        if con != None:
+            __is_connected = True
         telegram.send_message(
         update["message"]["chat"]["id"],
         "DB-connection succesful")
-
         return con
 
 
 
 
 def disconnect_from_db(db_con):
+    global __is_connected
     db_con.close()
+    __is_connected = False
 
 
 
