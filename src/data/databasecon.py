@@ -5,8 +5,8 @@ from urllib import parse
 __is_connected = False
 
 def connect_to_db():
-    if "DB_NAME" not in os.environ and "DB_HOST" not in os.environ and "DB_USER" not in os.environ and "DB_PASS" not in os.environ:
-        pass
+    if "DATABASE_URL" not in os.environ:
+        print("Environment-variable missing")
     else:
         parse.uses_netloc.append("postgres")
         url = parse.urlparse(os.environ["DATABASE_URL"])
