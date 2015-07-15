@@ -1,6 +1,7 @@
 import psycopg2
 import os
-from urllib import parse
+import urllib.parse
+from data import telegram
 
 __is_connected = False
 
@@ -12,9 +13,9 @@ def connect_to_db(update):
         url = parse.urlparse(os.environ["DATABASE_URL"])
         try:
             telegram.send_message(
-        update["message"]["chat"]["id"],
-        "Trying to connect to db"
-        )
+            update["message"]["chat"]["id"],
+            "Trying to connect to db"
+            )
             con = psycopg2.connect(
                 database=url.path[1:],
                 user=url.username,
