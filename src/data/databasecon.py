@@ -26,7 +26,7 @@ def connect_to_db(update):
             __is_connected = True
         telegram.send_message(
         update["message"]["chat"]["id"],
-        "DB-connection succesful")
+        "DB-connection successful")
         return con
 
 
@@ -36,6 +36,9 @@ def disconnect_from_db(db_con):
     global __is_connected
     db_con.close()
     __is_connected = False
+    telegram.send_message(
+        update["message"]["chat"]["id"],
+        "successfully disconnected from DB")
 
 
 
