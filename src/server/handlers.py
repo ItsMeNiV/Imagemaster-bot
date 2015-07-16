@@ -13,13 +13,11 @@ def handle_help(update):
 
 
 def handle_send(update):
-    #link = databasecon.search_image(update["message"]["text"], update)
-    #telegram.send_message(
-    #    update["message"]["chat"]["id"],
-    #    link
-    #    )
-    pass
-    #SEND IMAGE
+    link = databasecon.search_image(update["message"]["text"], update)
+    telegram.send_message(
+        update["message"]["chat"]["id"],
+        link
+        )
 
 
 

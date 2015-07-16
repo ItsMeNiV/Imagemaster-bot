@@ -5,16 +5,13 @@ from data import telegram
 
 __is_connected = False
 
-def connect_to_db(update):
+def connect_to_db():
     global __is_connected
     if "DATABASE_URL" not in os.environ or __is_connected == True:
         print("Environment-variable missing or already connected")
     else:
         urllib.parse.uses_netloc.append("postgres")
         url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        telegram.send_message(
-        update["message"]["chat"]["id"],
-        "Trying to connect to db")
         con = psycopg2.connect(
             database=url.path[1:],
             user=url.username,
@@ -24,10 +21,7 @@ def connect_to_db(update):
             )
         if con != None:
             __is_connected = True
-        telegram.send_message(
-        update["message"]["chat"]["id"],
-        "DB-connection successful")
-        return con
+    return con
 
 
 
@@ -43,43 +37,23 @@ def disconnect_from_db(db_con, update):
 
 
 def search_image(image_name, update):
-    if "DATABASE_URL" not in os.environ:
-        print("Environment-variable missing")
+    db_con = connect_to_db()
+    cur = db_con.cursor()
+    query = """select link from mm_image where id=%s"""
+    cur.execute(query, (image_name))
+    result = cur.fetchone()
+    if result != None:
+        image_link = str(result[0])
+        disconnect_from_db(db_con)
+        return image_link
     else:
-        urllib.parse.uses_netloc.append("postgres")
-        url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
-        telegram.send_message(
-        update["message"]["chat"]["id"],
-        "Trying to connect to db")
-        con = psycopg2.connect(
-            database=url.path[1:],
-            user=url.username,
-            password=url.password,
-            host=url.hostname,
-            port=url.port
-            )
-        if con != None:
-            telegram.send_message(
-            update["message"]["chat"]["id"],
-            "DB-connection successful")
-            cur = db_con.cursor()
-            query = """select link from mm_image where id=%s"""
-            cur.execute(query, (image_name))
-            result = cur.fetchone()
-            if result != None:
-                image_link = str(result[0])
-                disconnect_from_db(db_con)
-                return image_link
-            else:
-                disconnect_from_db(db_con)
-                return "Not found"
-        else:
-            print("DB-Connection not successful!")
+        disconnect_from_db(db_con)
+        return "Not found"
 
 
 
 def add_image(image_link, image_name, user_id, update):
-    db_con = connect_to_db(update)
+    db_con = connect_to_db()
     cur = db_con.cursor()
     query = """select * from image where image_name=%s"""
     cur.execute(query, (image_name,))
@@ -100,7 +74,7 @@ def add_image(image_link, image_name, user_id, update):
 
 
 def add_user(user_id, user_name, update):
-    db_con = connect_to_db(update)
+    db_con = connect_to_db()
     cur = db_con.cursor()
     query = """select * from user where user_id=%s"""
     cur.execute(query, (str(user_id),))
