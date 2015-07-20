@@ -72,6 +72,10 @@ def add_image(image_link, image_name, user_id, update):
             cur.execute(query, (image_name, image_link, user_id))
             db_con.commit()
             disconnect_from_db(db_con, update)
+            telegram.send_message(
+            update["message"]["chat"]["id"],
+            "Image {0} successfully added".format(image_name)
+            )
         else:
             telegram.send_message(
             update["message"]["chat"]["id"],
