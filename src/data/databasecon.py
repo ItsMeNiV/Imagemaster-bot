@@ -57,22 +57,27 @@ def add_image(image_link, image_name, user_id, update):
     result = cur.fetchone()
     disconnect_from_db(db_con, update)
     if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
+        if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]):
+            if "ADMIN_USERNAME" in os.environ:
+                user_id = str(os.environ["ADMIN_USERNAME"])
+            else:
+                print("Missing ADMIN_USERNAME Environment-variable")
         db_con = connect_to_db()
         cur = db_con.cursor()
-        query = """select * from image where image_name=%s"""
+        query = """select * from mm_image where id=%s"""
         cur.execute(query, (image_name,))
         result = cur.fetchone()
         if result == None:
-            query = """insert into image values(%s, %s, %s)"""
+            query = """insert into mm_image values(%s, %s, %s)"""
             cur.execute(query, (image_name, image_link, user_id))
             db_con.commit()
-            disconnect_from_db(db_con)
+            disconnect_from_db(db_con, update)
         else:
             telegram.send_message(
             update["message"]["chat"]["id"],
             "There's already an image with this name in the database"
             )
-            disconnect_from_db(db_con)
+            disconnect_from_db(db_con, update)
     else:
         telegram.send_message(
             update["message"]["chat"]["id"],
