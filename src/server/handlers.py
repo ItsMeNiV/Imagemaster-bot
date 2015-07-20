@@ -82,17 +82,12 @@ def handle_fuckyou(update):
 
 
 
-def handle_configdbtemp(update):
-    databasecon.configdbtemp(update)
-
-
-
 __handlers = {
     "help": handle_help,
     "about": handle_about,
     "add": handle_add_image,
     "adduser": handle_add_user,
-    "configdb": handle_configdbtemp,
+    "addimage": handle_add_image,
     "fuckyou": handle_fuckyou
 }
 

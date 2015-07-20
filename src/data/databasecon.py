@@ -114,37 +114,3 @@ def add_user(user_username, user_name, update):
             update["message"]["chat"]["id"],
             "You are not allowed to add users!"
             )
-
-
-
-def configdbtemp(update):
-    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]):
-        db_con = connect_to_db()
-        cur = db_con.cursor()
-        cur.execute("drop table mm_image") #drop table image
-        telegram.send_message(
-            update["message"]["chat"]["id"],
-            "Dropped table image"
-            )
-        cur.execute("drop table mm_user") #drop table user
-        telegram.send_message(
-            update["message"]["chat"]["id"],
-            "Dropped table user"
-            )
-        cur.execute("create table mm_user(username text primary key not null, name text not null);") #create table user
-        telegram.send_message(
-            update["message"]["chat"]["id"],
-            "Created table user"
-            )
-        cur.execute("create table mm_image(id text primary key not null, link text not null, uploaded_by text not null references mm_user(username));") #create table image
-        telegram.send_message(
-            update["message"]["chat"]["id"],
-            "Created table image"
-            )
-        db_con.commit()
-        disconnect_from_db(db_con, update)
-    else:
-        telegram.send_message(
-            update["message"]["chat"]["id"],
-            "You are not the admin!"
-            )
