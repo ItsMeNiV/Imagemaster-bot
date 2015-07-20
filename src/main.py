@@ -21,8 +21,16 @@ def main():
             if pattern.match(text):
                 handlers.handle_send(update)
             elif text.startswith("/mm_"):
-                text = text[4:]
-                handlers.handle(text, update)
+                retext = None
+                m = re.search('^\/mm_(.*?) .*$', text)
+                if m:
+                    retext = m.group(1)
+                else:
+                    m = re.search('^\/mm_(.*?)$', text)
+                    if m:
+                        retext = m.group(1)
+                print(retext)
+                handlers.handle(retext, update)
 
     return ""
 

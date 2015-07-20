@@ -52,38 +52,99 @@ def search_image(image_name, update):
 def add_image(image_link, image_name, user_id, update):
     db_con = connect_to_db()
     cur = db_con.cursor()
-    query = """select * from image where image_name=%s"""
-    cur.execute(query, (image_name,))
+    query = """select * from mm_user where username=%s"""
+    cur.execute(query, [str(update["message"]["from"]["id"])])
     result = cur.fetchone()
-    if result == None:
-        query = """insert into image values(%s, %s, %s)"""
-        cur.execute(query, (image_name, image_link, user_id))
-        db_con.commit()
-        disconnect_from_db(db_con)
+    disconnect_from_db(db_con, update)
+    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
+        db_con = connect_to_db()
+        cur = db_con.cursor()
+        query = """select * from image where image_name=%s"""
+        cur.execute(query, (image_name,))
+        result = cur.fetchone()
+        if result == None:
+            query = """insert into image values(%s, %s, %s)"""
+            cur.execute(query, (image_name, image_link, user_id))
+            db_con.commit()
+            disconnect_from_db(db_con)
+        else:
+            telegram.send_message(
+            update["message"]["chat"]["id"],
+            "There's already an image with this name in the database"
+            )
+            disconnect_from_db(db_con)
     else:
         telegram.send_message(
-        update["message"]["chat"]["id"],
-        "There's already an image with this name in the database"
-        )
-        disconnect_from_db(db_con)
+            update["message"]["chat"]["id"],
+            "You are not allowed to add users!"
+            )
 
 
 
-def add_user(user_id, user_name, update):
+def add_user(user_username, user_name, update):
     db_con = connect_to_db()
     cur = db_con.cursor()
-    query = """select * from user where user_id=%s"""
-    cur.execute(query, (str(user_id),))
+    query = """select * from mm_user where username=%s"""
+    cur.execute(query, [str(update["message"]["from"]["id"])])
     result = cur.fetchone()
-    if result == None:
-        query = """insert into user values(%s, %s)"""
-        cur.execute(query, (user_id, user_name))
-        print("User created!")
-        db_con.commit()
-        disconnect_from_db(db_con)
+    disconnect_from_db(db_con, update)
+    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
+        db_con = connect_to_db()
+        cur = db_con.cursor()
+        query = """select * from mm_user where username=%s"""
+        cur.execute(query, [user_username])
+        result = cur.fetchone()
+        if result == None:
+            query = """insert into mm_user values(%s, %s)"""
+            cur.execute(query, (user_username, user_name))
+            telegram.send_message(
+            update["message"]["chat"]["id"],
+            "User created!"
+            )
+            db_con.commit()
+            disconnect_from_db(db_con, update)
+        else:
+            telegram.send_message(
+            update["message"]["chat"]["id"],
+            "There's already a user with this id in the database"
+            )
+            disconnect_from_db(db_con, update)
     else:
         telegram.send_message(
-        update["message"]["chat"]["id"],
-        "There's already a user with this id in the database"
-        )
-        disconnect_from_db(db_con)
+            update["message"]["chat"]["id"],
+            "You are not allowed to add users!"
+            )
+
+
+
+def configdbtemp(update):
+    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]):
+        db_con = connect_to_db()
+        cur = db_con.cursor()
+        cur.execute("drop table mm_image") #drop table image
+        telegram.send_message(
+            update["message"]["chat"]["id"],
+            "Dropped table image"
+            )
+        cur.execute("drop table mm_user") #drop table user
+        telegram.send_message(
+            update["message"]["chat"]["id"],
+            "Dropped table user"
+            )
+        cur.execute("create table mm_user(username text primary key not null, name text not null);") #create table user
+        telegram.send_message(
+            update["message"]["chat"]["id"],
+            "Created table user"
+            )
+        cur.execute("create table mm_image(id text primary key not null, link text not null, uploaded_by text not null references mm_user(username));") #create table image
+        telegram.send_message(
+            update["message"]["chat"]["id"],
+            "Created table image"
+            )
+        db_con.commit()
+        disconnect_from_db(db_con, update)
+    else:
+        telegram.send_message(
+            update["message"]["chat"]["id"],
+            "You are not the admin!"
+            )

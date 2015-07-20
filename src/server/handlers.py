@@ -2,6 +2,7 @@ from data import telegram
 from doc import filehandler
 from data import databasecon
 import psycopg2
+import re
 
 
 def handle_help(update):
@@ -42,8 +43,21 @@ def handle_add_image(update):
 
 
 def handle_add_user(update):
-    #databasecon.add_user(update["message"]["from"]["id"],update["message"]["from"]["username"], update) #Need to parse id and name from text!
-    pass #ADD USER TO DB
+    username = None
+    name = None
+    m = re.search('^\/mm_adduser (.*?) [A-Za-z0-9]*', update["message"]["text"]) #Matching the username
+    if m:
+        username = m.group(1)
+    m = re.search('^\/mm_adduser [A-Za-z0-9]* (.*?)$', update["message"]["text"]) #Matching the user's name
+    if m:
+        name = m.group(1)
+    if username is not None and name is not None:
+        databasecon.add_user(username, name, update)
+    else:
+        telegram.send_message(
+        update["message"]["chat"]["id"],
+        "Can't find username or user's name. Be sure your message looks like this: \"/mm_adduser <username> <name>\" The second name should be the user's firstname"
+        )
 
 
 
@@ -68,11 +82,17 @@ def handle_fuckyou(update):
 
 
 
+def handle_configdbtemp(update):
+    databasecon.configdbtemp(update)
+
+
+
 __handlers = {
     "help": handle_help,
     "about": handle_about,
     "add": handle_add_image,
     "adduser": handle_add_user,
+    "configdb": handle_configdbtemp,
     "fuckyou": handle_fuckyou
 }
 
