@@ -36,7 +36,7 @@ def disconnect_from_db(db_con, update):
 def search_image(image_name, update):
     db_con = connect_to_db()
     cur = db_con.cursor()
-    query = """select link from mm_image where id=%s"""
+    query = """select link from mm_image where lower(id)=lower(%s)"""
     cur.execute(query, [image_name])
     result = cur.fetchone()
     if result != None:
@@ -64,7 +64,7 @@ def add_image(image_link, image_name, user_id, update):
                 print("Missing ADMIN_USERNAME Environment-variable")
         db_con = connect_to_db()
         cur = db_con.cursor()
-        query = """select * from mm_image where id=%s"""
+        query = """select * from mm_image where lower(id)=lower(%s)"""
         cur.execute(query, (image_name,))
         result = cur.fetchone()
         if result == None:
