@@ -1,5 +1,7 @@
 import requests
 import json
+import re
+import urllib
 
 __apikey = None
 __url = "https://api.telegram.org/bot{0}/{1}"
@@ -29,3 +31,22 @@ def send_message(chat_id,
         data["disable_web_page_preview"] = "true"
 
     response = requests.post(url, params=data)
+
+def send_photo(chat_id, image_link, image_name):
+    print("I'm in send_photo")
+    file_extension = None
+    m = re.search('^[A-Za-z0-9]*\.(.+?)$', image_name)
+    if m:
+        file_extension = m.group(1)
+    if file_extension == "gif":
+        pass #send document
+    elif file_extension == "jpg" or file_extension == "jpeg" or file_extension == "png":
+        url = __url.format(__apikey, "sendPhoto")
+        sendname = str("send.{0}").format(file_extension)
+        f = open(sendname, 'wb')
+        f.write(urllib.request.urlopen(image_link).read())
+        f.close()
+        photo = open(sendname, 'rb')
+        files = {'photo': photo}
+        data = {"chat_id": chat_id}
+        response = requests.post(url, params=data, files=files)
