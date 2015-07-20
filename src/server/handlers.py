@@ -102,7 +102,6 @@ def handle_list_images(update):
 __handlers = {
     "help": handle_help,
     "about": handle_about,
-    "add": handle_add_image,
     "adduser": handle_add_user,
     "addimage": handle_add_image,
     "listimages": handle_list_images,
