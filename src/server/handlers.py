@@ -16,10 +16,16 @@ def handle_help(update):
 def handle_send(update):
     image_name = str(update["message"]["text"])
     link = databasecon.search_image(image_name, update)
-    telegram.send_photo(
+    if link != "Not found":
+        telegram.send_photo(
+            update["message"]["chat"]["id"],
+            link,
+            image_name
+            )
+    else:
+        telegram.send_message(
         update["message"]["chat"]["id"],
-        link,
-        image_name
+        "Image not found"
         )
 
 

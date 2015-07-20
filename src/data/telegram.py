@@ -33,7 +33,6 @@ def send_message(chat_id,
     response = requests.post(url, params=data)
 
 def send_photo(chat_id, image_link, image_name):
-    print("I'm in send_photo")
     file_extension = None
     m = re.search('^[A-Za-z0-9]*\.(.+?)$', image_name)
     if m:
