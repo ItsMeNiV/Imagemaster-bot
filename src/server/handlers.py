@@ -13,20 +13,31 @@ def handle_help(update):
 
 
 def handle_send(update):
-    #link = databasecon.search_image(update["message"]["text"], update)
-    #telegram.send_message(
-    #    update["message"]["chat"]["id"],
-    #    link
-    #    )
-    pass
+    image_name = str(update["message"]["text"])
+    link = databasecon.search_image(image_name, update)
+    telegram.send_message(
+        update["message"]["chat"]["id"],
+        link
+        )
 
 
 
 def handle_add_image(update):
-    name = "testname, please ignore" #Parse from text
-    link = "testlink, please ignore" #Parse from text
-    #databasecon.add_image(link, name, update["message"]["from"]["id"], update)
-    pass #ADD IMAGE TO DB
+    name = None
+    link = None
+    m = re.search('^\/mm_add (.+?) [A-Za-z0-9]*', update["message"]["text"]) #Matching the name
+    if m:
+        name = m.group(1)
+    m = re.search('^\/mm_add [A-Za-z0-9]*\.[A-Za-z0-9]* (.*?)$', update["message"]["text"]) #Matching the link
+    if m:
+        link = m.group(1)
+    if link is not None and name is not None:
+        databasecon.add_image(link, name, update["message"]["from"]["id"], update)
+    else:
+        telegram.send_message(
+        update["message"]["chat"]["id"],
+        "Can't find image- name or link. Be sure your message looks like this: \"/mm_add <imagename> <imagelink>\" and don't forget the file extension for the imagename"
+        )
 
 
 
