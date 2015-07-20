@@ -119,3 +119,16 @@ def add_user(user_username, user_name, update):
             update["message"]["chat"]["id"],
             "You are not allowed to add users!"
             )
+
+
+
+def get_all_images(update):
+    db_con = connect_to_db()
+    cur = db_con.cursor()
+    cur.execute("select id from mm_image;")
+    result = cur.fetchall()
+    disconnect_from_db(db_con, update)
+
+    string_list = [' '.join(item) for item in result]
+    retstring = ', '.join(string_list)
+    return retstring

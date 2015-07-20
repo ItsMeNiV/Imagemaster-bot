@@ -89,12 +89,23 @@ def handle_fuckyou(update):
 
 
 
+def handle_list_images(update):
+    image_list_string = databasecon.get_all_images(update)
+    writestring = "All Images in the Database: {0}".format(image_list_string)
+    telegram.send_message(
+        update["message"]["chat"]["id"],
+        writestring
+        )
+
+
+
 __handlers = {
     "help": handle_help,
     "about": handle_about,
     "add": handle_add_image,
     "adduser": handle_add_user,
     "addimage": handle_add_image,
+    "listimages": handle_list_images,
     "fuckyou": handle_fuckyou
 }
 
