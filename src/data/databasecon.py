@@ -126,10 +126,14 @@ def add_user(user_username, user_name, update):
 
 
 
-def get_all_images(update):
+def get_all_images(update, extension=None):
     db_con = connect_to_db()
     cur = db_con.cursor()
-    cur.execute("select id from mm_image;")
+    if extension is None:
+        cur.execute("select id from mm_image;")
+    else:
+        print(extension)
+        cur.execute("select id from mm_image where id like %s;", [str("%.{0}").format(extension)])
     result = cur.fetchall()
     disconnect_from_db(db_con, update)
 

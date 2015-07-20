@@ -90,7 +90,11 @@ def handle_fuckyou(update):
 
 
 def handle_list_images(update):
-    image_list_string = databasecon.get_all_images(update)
+    m = re.search('^\/mm_listimages (.*?)$', update["message"]["text"])
+    if m:
+        image_list_string = databasecon.get_all_images(update, m.group(1))
+    else:
+        image_list_string = databasecon.get_all_images(update)
     writestring = "All Images in the Database: {0}".format(image_list_string)
     telegram.send_message(
         update["message"]["chat"]["id"],
