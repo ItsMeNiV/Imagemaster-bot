@@ -39,7 +39,15 @@ def send_photo(chat_id, image_link, image_name):
     if m:
         file_extension = m.group(1)
     if file_extension == "gif":
-        pass #send document
+        url = __url.format(__apikey, "sendDocument")
+        sendname = str("send.{0}").format(file_extension)
+        f = open(sendname, 'wb')
+        f.write(urllib.request.urlopen(image_link).read())
+        f.close()
+        document = open(sendname, 'rb')
+        data = {'chat_id': chat_id}
+        files = {'document': document}
+        response = requests.post(url, params=data, files=files)
     elif file_extension == "jpg" or file_extension == "jpeg" or file_extension == "png":
         url = __url.format(__apikey, "sendPhoto")
         sendname = str("send.{0}").format(file_extension)
@@ -48,5 +56,5 @@ def send_photo(chat_id, image_link, image_name):
         f.close()
         photo = open(sendname, 'rb')
         files = {'photo': photo}
-        data = {"chat_id": chat_id}
+        data = {'chat_id': chat_id}
         response = requests.post(url, params=data, files=files)
