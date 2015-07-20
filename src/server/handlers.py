@@ -46,7 +46,7 @@ def handle_add_image(update):
 def handle_add_user(update):
     username = None
     name = None
-    m = re.search('^\/mm_adduser (.*?) [A-Za-z0-9]*', update["message"]["text"]) #Matching the username
+    m = re.search('^\/mm_adduser (.*?) [A-Za-z0-9\-_]*', update["message"]["text"]) #Matching the username
     if m:
         username = m.group(1)
     m = re.search('^\/mm_adduser [A-Za-z0-9]* (.*?)$', update["message"]["text"]) #Matching the user's name
