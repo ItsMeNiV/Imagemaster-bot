@@ -53,7 +53,7 @@ def add_image(image_link, image_name, user_id, update):
     db_con = connect_to_db()
     cur = db_con.cursor()
     query = """select * from mm_user where username=%s"""
-    cur.execute(query, [str(update["message"]["from"]["id"])])
+    cur.execute(query, [str(update["message"]["from"]["username"])])
     result = cur.fetchone()
     disconnect_from_db(db_con, update)
     if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
@@ -81,7 +81,7 @@ def add_image(image_link, image_name, user_id, update):
     else:
         telegram.send_message(
             update["message"]["chat"]["id"],
-            "You are not allowed to add users!"
+            "You are not allowed to add images!"
             )
 
 
