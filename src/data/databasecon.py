@@ -45,7 +45,7 @@ def search_image(image_name, update):
         return image_link
     else:
         disconnect_from_db(db_con, update)
-        return "Not found"
+        return None
 
 
 
