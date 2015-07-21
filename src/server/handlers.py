@@ -103,12 +103,48 @@ def handle_list_images(update):
 
 
 
+def handle_update_imagename(update):
+    oldname = None
+    newname = None
+    m = re.search('^\/mm_updateimagename (.*?) [A-Za-z0-9_]*', update["message"]["text"])
+    if m:
+        oldname = m.group(1)
+    m = re.search('^\/mm_updateimagename [A-Za-z0-9_\.]* (.*?)$', update["message"]["text"])
+    if m:
+        newname = m.group(1)
+    if oldname and newname:
+        databasecon.update_imagename(oldname, newname, update)
+    else:
+        telegram.send_message(
+        update["message"]["chat"]["id"],
+        "Can't find old- or new name. Be sure your message looks like this: \"/mm_updateimagename <oldname> <newname>\""
+        )
+
+
+
+def handle_delete_image(update):
+    imagename = None
+    m = re.search('^\/mm_deleteimage (.*?)$', update["message"]["text"])
+    if m:
+        imagename = m.group(1)
+    if imagename:
+        databasecon.delete_image(imagename, update)
+    else:
+        telegram.send_message(
+        update["message"]["chat"]["id"],
+        "Can't find imagename. Be sure your message looks like this: \"/mm_deleteimage <imagename>\""
+        )
+
+
+
 __handlers = {
     "help": handle_help,
     "about": handle_about,
     "adduser": handle_add_user,
     "addimage": handle_add_image,
     "listimages": handle_list_images,
+    "updateimagename": handle_update_imagename,
+    "deleteimage": handle_delete_image,
     "fuckyou": handle_fuckyou
 }
 

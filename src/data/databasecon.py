@@ -140,3 +140,47 @@ def get_all_images(update, extension=None):
     string_list = [' '.join(item) for item in result]
     retstring = ', '.join(string_list)
     return retstring
+
+
+
+def update_imagename(oldname, newname, update):
+    db_con = connect_to_db()
+    cur = db_con.cursor()
+    query = """select * from mm_user where username=%s"""
+    cur.execute(query, [str(update["message"]["from"]["id"])])
+    result = cur.fetchone()
+    disconnect_from_db(db_con, update)
+    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
+        db_con = connect_to_db()
+        cur = db_con.cursor()
+        cur.execute("update mm_image set id=lower(%s) where lower(id)=lower(%s);", (newname, oldname))
+        db_con.commit()
+        disconnect_from_db(db_con, update)
+        telegram.send_message(
+                update["message"]["chat"]["id"],
+                "Updated image name {0} to {1}".format(oldname, newname)
+                )
+    else:
+        telegram.send_message(
+                update["message"]["chat"]["id"],
+                "You are not allowed to do that!"
+                )
+
+
+
+def delete_image(imagename, update):
+    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]):
+        db_con = connect_to_db()
+        cur = db_con.cursor()
+        cur.execute("delete from mm_image where lower(id)=lower(%s);", [imagename])
+        db_con.commit()
+        disconnect_from_db(db_con, update)
+        telegram.send_message(
+                update["message"]["chat"]["id"],
+                "Removed image {0}".format(imagename)
+                )
+    else:
+        telegram.send_message(
+                update["message"]["chat"]["id"],
+                "Only the admin is allowed to remove images!"
+                )
