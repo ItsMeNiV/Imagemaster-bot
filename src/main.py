@@ -12,7 +12,7 @@ __app = Flask(__name__)
 
 @__app.route("/", methods=["POST"])
 def main():
-    pattern = re.compile("^[A-Za-z0-9]*.(jpg|jpeg|gif|png)$")
+    pattern = re.compile("^[A-Za-z0-9]*\.(jpg|jpeg|gif|png)$")
     update = request.get_json()
     if "message" in update:
         message = update["message"]
