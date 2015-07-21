@@ -21,19 +21,25 @@ def main():
         message = update["message"]
         if "text" in message:
             text = message["text"]
-            if pattern.match(text):
-                handlers.handle_send(update)
-            elif text.startswith("/mm_"):
-                retext = None
-                m = re.search('^\/mm_(.*?) .*$', text)
-                if m:
-                    retext = m.group(1)
-                else:
-                    m = re.search('^\/mm_(.*?)$', text)
+            if "username" in message["from"]:
+                if pattern.match(text):
+                    handlers.handle_send(update)
+                elif text.startswith("/mm_"):
+                    retext = None
+                    m = re.search('^\/mm_(.*?) .*$', text)
                     if m:
                         retext = m.group(1)
-                print(retext)
-                handlers.handle(retext, update)
+                    else:
+                        m = re.search('^\/mm_(.*?)$', text)
+                        if m:
+                            retext = m.group(1)
+                    print(retext)
+                    handlers.handle(retext, update)
+            else:
+                telegram.send_message(
+                    update["message"]["chat"]["id"],
+                    "Smul is a huge faggot! Also: You don't have a username"
+                    )
 
     return ""
 
