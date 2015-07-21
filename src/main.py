@@ -36,11 +36,6 @@ def main():
                 print(retext)
                 if "username" in message["from"]:
                     handlers.handle(retext, update)
-                else:
-                    telegram.send_message(
-                        update["message"]["chat"]["id"],
-                        "Smul is a huge faggot! Also: You don't have a username"
-                        )
 
     return ""
 
