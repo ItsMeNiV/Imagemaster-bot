@@ -9,8 +9,8 @@ from server import handlers
 from data import telegram
 
 __app = Flask(__name__)
-app.logger.addHandler(logging.StreamHandler(sys.stdout))
-app.logger.setLevel(logging.ERROR)
+__app.logger.addHandler(logging.StreamHandler(sys.stdout))
+__app.logger.setLevel(logging.ERROR)
 
 
 @__app.route("/", methods=["POST"])
