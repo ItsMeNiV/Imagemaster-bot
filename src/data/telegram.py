@@ -40,8 +40,9 @@ def send_photo(chat_id, image_link, image_name):
     if file_extension == "gif":
         url = __url.format(__apikey, "sendDocument")
         sendname = str("send.{0}").format(file_extension)
+        req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
         f = open(sendname, 'wb')
-        f.write(urllib.request.urlopen(image_link).read())
+        f.write(urllib.request.urlopen(req).read())
         f.close()
         document = open(sendname, 'rb')
         data = {'chat_id': chat_id}
