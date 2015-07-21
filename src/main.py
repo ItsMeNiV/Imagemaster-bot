@@ -24,7 +24,7 @@ def main():
             if pattern.match(text):
                 if "username" in message["from"]:
                     handlers.handle_send(update)
-                else
+                else:
                     telegram.send_message(
                         update["message"]["chat"]["id"],
                         "Smul is a huge faggot! Also: You don't have a username"
@@ -41,7 +41,7 @@ def main():
                 print(retext)
                 if "username" in message["from"]:
                     handlers.handle(retext, update)
-                else
+                else:
                     telegram.send_message(
                         update["message"]["chat"]["id"],
                         "Smul is a huge faggot! Also: You don't have a username"
