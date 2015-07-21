@@ -51,8 +51,9 @@ def send_photo(chat_id, image_link, image_name):
     elif file_extension == "jpg" or file_extension == "jpeg" or file_extension == "png":
         url = __url.format(__apikey, "sendPhoto")
         sendname = str("send.{0}").format(file_extension)
+        req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
         f = open(sendname, 'wb')
-        f.write(urllib.request.urlopen(image_link).read())
+        f.write(urllib.request.urlopen(req).read())
         f.close()
         photo = open(sendname, 'rb')
         files = {'photo': photo}
