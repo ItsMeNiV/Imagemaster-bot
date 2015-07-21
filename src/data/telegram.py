@@ -57,3 +57,5 @@ def send_photo(chat_id, image_link, image_name):
         files = {'photo': photo}
         data = {'chat_id': chat_id}
         response = requests.post(url, params=data, files=files)
+    else:
+        pass
