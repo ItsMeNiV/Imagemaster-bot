@@ -3,11 +3,14 @@ import sys
 import os
 import json
 import re
+import logging
 
 from server import handlers
 from data import telegram
 
 __app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 
 @__app.route("/", methods=["POST"])
