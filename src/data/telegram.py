@@ -37,7 +37,7 @@ def send_photo(chat_id, image_link, image_name):
     m = re.search('^[A-Za-z0-9]*\.(.+?)$', image_name)
     if m:
         file_extension = m.group(1)
-    if file_extension == "gif":
+    if file_extension == "gif" or file_extension == "webm":
         url = __url.format(__apikey, "sendDocument")
         sendname = str("send.{0}").format(file_extension)
         req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
