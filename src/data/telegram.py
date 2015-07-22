@@ -77,10 +77,12 @@ def send_photo(chat_id, image_link, image_name):
         url = __url.format(__apikey, "sendDocument")
         sendname = str("send.{0}").format(file_extension)
         req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
+        print("Now downloading...")
         try:
             f = open(sendname, 'wb')
             f.write(urllib.request.urlopen(req).read())
             f.close()
+            print("done")
         except Exception as e:
             send_message(
             chat_id,
@@ -89,6 +91,8 @@ def send_photo(chat_id, image_link, image_name):
         webm = open(sendname, 'rb')
         data = {'chat_id': chat_id}
         files = {'document': webm}
+        print("Now uploading...")
         response = requests.post(url, params=data, files=files)
+        print("done")
     else:
         pass
