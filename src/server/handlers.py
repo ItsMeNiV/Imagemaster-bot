@@ -33,10 +33,10 @@ def handle_send(update):
 def handle_add_image(update):
     name = None
     link = None
-    m = re.search('^\/mm_addimage (.+?) [A-Za-z0-9]*', update["message"]["text"]) #Matching the name
+    m = re.search('^\/mm_addimage (.+?) [A-Za-z0-9_\-\.]*', update["message"]["text"]) #Matching the name
     if m:
         name = m.group(1)
-    m = re.search('^\/mm_addimage [A-Za-z0-9]*\.[A-Za-z0-9]* (.*?)$', update["message"]["text"]) #Matching the link
+    m = re.search('^\/mm_addimage [A-Za-z0-9_\-\.]*\.[A-Za-z0-9]* (.*?)$', update["message"]["text"]) #Matching the link
     if m:
         link = m.group(1)
     if link is not None and name is not None:
@@ -106,10 +106,10 @@ def handle_list_images(update):
 def handle_update_imagename(update):
     oldname = None
     newname = None
-    m = re.search('^\/mm_updateimagename (.*?) [A-Za-z0-9_]*', update["message"]["text"])
+    m = re.search('^\/mm_updateimagename (.*?) [A-Za-z0-9_\-\.]*', update["message"]["text"])
     if m:
         oldname = m.group(1)
-    m = re.search('^\/mm_updateimagename [A-Za-z0-9_\.]* (.*?)$', update["message"]["text"])
+    m = re.search('^\/mm_updateimagename [A-Za-z0-9_\-\.]* (.*?)$', update["message"]["text"])
     if m:
         newname = m.group(1)
     if oldname and newname:
@@ -118,6 +118,25 @@ def handle_update_imagename(update):
         telegram.send_message(
         update["message"]["chat"]["id"],
         "Can't find old- or new name. Be sure your message looks like this: \"/mm_updateimagename <oldname> <newname>\""
+        )
+
+
+
+def handle_update_imagelink(update):
+    imagename = None
+    newlink = None
+    m = re.search('^\/mm_updateimagelink (.*?) [A-Za-z0-9_\-\.]*', update["message"]["text"])
+    if m:
+        imagename = m.group(1)
+    m = re.search('^\/mm_updateimagelink [A-Za-z0-9_\-\.]* (.*?)$', update["message"]["text"])
+    if m:
+        newlink = m.group(1)
+    if newlink and imagename:
+        databasecon.update_imagelink(imagename, newlink, update)
+    else:
+        telegram.send_message(
+        update["message"]["chat"]["id"],
+        "Can't find imagename or new link. Be sure your message looks like this: \"/mm_updateimagelink <imagename> <new link>\""
         )
 
 
@@ -131,9 +150,24 @@ def handle_delete_image(update):
         databasecon.delete_image(imagename, update)
     else:
         telegram.send_message(
-        update["message"]["chat"]["id"],
-        "Can't find imagename. Be sure your message looks like this: \"/mm_deleteimage <imagename>\""
-        )
+            update["message"]["chat"]["id"],
+            "Can't find imagename. Be sure your message looks like this: \"/mm_deleteimage <imagename>\""
+            )
+
+
+
+def handle_get_imageinfo(update):
+    imagename = None
+    m = re.search('^\/mm_getimageinfo (.*?)$', update["message"]["text"])
+    if m:
+        imagename = m.group(1)
+    if imagename:
+        databasecon.get_image_info(imagename, update)
+    else:
+        telegram.send_message(
+            update["message"]["chat"]["id"],
+            "Can't find imagename. Be sure your message looks like this: \"/mm_getimageinfo <imagename>\""
+            )
 
 
 
@@ -145,6 +179,8 @@ __handlers = {
     "listimages": handle_list_images,
     "updateimagename": handle_update_imagename,
     "deleteimage": handle_delete_image,
+    "updateimagelink": handle_update_imagelink,
+    "getimageinfo": handle_get_imageinfo,
     "fuckyou": handle_fuckyou
 }
 
