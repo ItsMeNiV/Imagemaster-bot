@@ -146,8 +146,8 @@ def get_all_images(update, extension=None):
 def update_imagename(oldname, newname, update):
     db_con = connect_to_db()
     cur = db_con.cursor()
-    query = """select * from mm_user where username=%s"""
-    cur.execute(query, [str(update["message"]["from"]["username"])])
+    query = """select * from mm_image where uploaded_by=%s and id=%s"""
+    cur.execute(query, (str(update["message"]["from"]["username"]), oldname))
     result = cur.fetchone()
     disconnect_from_db(db_con, update)
     if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
@@ -163,7 +163,7 @@ def update_imagename(oldname, newname, update):
     else:
         telegram.send_message(
                 update["message"]["chat"]["id"],
-                "You are not allowed to do that!"
+                "You didn't upload that image so you can't change it!"
                 )
 
 
