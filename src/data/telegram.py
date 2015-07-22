@@ -33,6 +33,7 @@ def send_message(chat_id,
     response = requests.post(url, params=data)
 
 def send_photo(chat_id, image_link, image_name):
+    print("{0}\n{1}\n{2}".format(chat_id, image_link, image_name))
     file_extension = None
     m = re.search('^[A-Za-z0-9]*\.(.+?)$', image_name)
     if m:
@@ -41,9 +42,15 @@ def send_photo(chat_id, image_link, image_name):
         url = __url.format(__apikey, "sendDocument")
         sendname = str("send.{0}").format(file_extension)
         req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
-        f = open(sendname, 'wb')
-        f.write(urllib.request.urlopen(req).read())
-        f.close()
+        try:
+            f = open(sendname, 'wb')
+            f.write(urllib.request.urlopen(req).read())
+            f.close()
+        except Exception as e:
+            send_message(
+            chat_id,
+            "Failed to download gif"
+            )
         document = open(sendname, 'rb')
         data = {'chat_id': chat_id}
         files = {'document': document}
@@ -52,14 +59,36 @@ def send_photo(chat_id, image_link, image_name):
         url = __url.format(__apikey, "sendPhoto")
         sendname = str("send.{0}").format(file_extension)
         req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
-        f = open(sendname, 'wb')
-        f.write(urllib.request.urlopen(req).read())
-        f.close()
+        try:
+            f = open(sendname, 'wb')
+            f.write(urllib.request.urlopen(req).read())
+            f.close()
+        except Exception as e:
+            send_message(
+            chat_id,
+            "Failed to download image"
+            )
         photo = open(sendname, 'rb')
         files = {'photo': photo}
         data = {'chat_id': chat_id}
         response = requests.post(url, params=data, files=files)
     elif file_extension == "webm":
-        pass
+        print("Iz a webm")
+        url = __url.format(__apikey, "sendDocument")
+        sendname = str("send.{0}").format(file_extension)
+        req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
+        try:
+            f = open(sendname, 'wb')
+            f.write(urllib.request.urlopen(req).read())
+            f.close()
+        except Exception as e:
+            send_message(
+            chat_id,
+            "Failed to download webm"
+            )
+        webm = open(sendname, 'rb')
+        data = {'chat_id': chat_id}
+        files = {'document': webm}
+        response = requests.post(url, params=data, files=files)
     else:
         pass
