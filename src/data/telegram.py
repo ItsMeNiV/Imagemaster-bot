@@ -73,11 +73,9 @@ def send_photo(chat_id, image_link, image_name):
         data = {'chat_id': chat_id}
         response = requests.post(url, params=data, files=files)
     elif file_extension == "webm":
-        print("Iz a webm")
-        url = __url.format(__apikey, "sendDocument")
-        data = {'chat_id': chat_id}
-        files = {'document': image_link}
-        response = requests.post(url, params=data, files=files)
-        print("done")
+        send_message(
+            chat_id,
+            "Webms aren't supported yet, so here's a link: {0}".format(image_link)
+            )
     else:
         pass
