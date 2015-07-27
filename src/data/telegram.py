@@ -69,29 +69,14 @@ def send_photo(chat_id, image_link, image_name):
             "Failed to download image"
             )
         photo = open(sendname, 'rb')
-        files = {'photo': photo}
+        files = {'photo': image_link}
         data = {'chat_id': chat_id}
         response = requests.post(url, params=data, files=files)
     elif file_extension == "webm":
         print("Iz a webm")
         url = __url.format(__apikey, "sendDocument")
-        #sendname = str("send.{0}").format(file_extension)
-        #req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11'})
-        #print("Now downloading...")
-        #try:
-        #    f = open(sendname, 'wb')
-        #    f.write(urllib.request.urlopen(req).read())
-        #    f.close()
-        #    print("done")
-        #except Exception as e:
-        #    send_message(
-        #    chat_id,
-        #    "Failed to download webm"
-        #    )
-        #webm = open(sendname, 'rb')
         data = {'chat_id': chat_id}
         files = {'document': image_link}
-        #print("Now uploading...")
         response = requests.post(url, params=data, files=files)
         print("done")
     else:
