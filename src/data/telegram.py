@@ -57,7 +57,7 @@ def send_photo(chat_id, image_link, image_name):
         response = requests.post(url, params=data, files=files)
     elif file_extension == "jpg" or file_extension == "jpeg" or file_extension == "png":
         url = __url.format(__apikey, "sendPhoto")
-        sendname = str("send.{0}").format(file_extension)
+        sendname = str("img.{0}").format(file_extension)
         req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
         try:
             f = open(sendname, 'wb')
