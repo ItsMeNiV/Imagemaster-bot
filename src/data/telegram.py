@@ -69,7 +69,7 @@ def send_photo(chat_id, image_link, image_name):
             "Failed to download image"
             )
         photo = open(sendname, 'rb')
-        files = {'photo': image_link}
+        files = {'photo': photo}
         data = {'chat_id': chat_id}
         response = requests.post(url, params=data, files=files)
     elif file_extension == "webm":
