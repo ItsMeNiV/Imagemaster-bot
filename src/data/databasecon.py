@@ -94,7 +94,7 @@ def add_user(user_username, user_name, update):
     db_con = connect_to_db()
     cur = db_con.cursor()
     query = """select * from mm_user where username=%s"""
-    cur.execute(query, [str(update["message"]["from"]["username"])])
+    cur.execute(query, [str(update["message"]["from"]["id"])])
     result = cur.fetchone()
     disconnect_from_db(db_con, update)
     if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
@@ -146,8 +146,8 @@ def get_all_images(update, extension=None):
 def update_imagename(oldname, newname, update):
     db_con = connect_to_db()
     cur = db_con.cursor()
-    query = """select * from mm_image where uploaded_by=%s and id=%s"""
-    cur.execute(query, (str(update["message"]["from"]["username"]), oldname))
+    query = """select * from mm_user where username=%s"""
+    cur.execute(query, [str(update["message"]["from"]["id"])])
     result = cur.fetchone()
     disconnect_from_db(db_con, update)
     if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
@@ -163,34 +163,20 @@ def update_imagename(oldname, newname, update):
     else:
         telegram.send_message(
                 update["message"]["chat"]["id"],
-                "You didn't upload that image so you can't change it!"
+                "You are not allowed to do that!"
                 )
 
 
-
-def update_imagelink(imagename, newlink, update):
+def searchimage(searchname, update):
     db_con = connect_to_db()
     cur = db_con.cursor()
-    query = """select * from mm_image where uploaded_by=%s and id=%s"""
-    cur.execute(query, (str(update["message"]["from"]["username"]), imagename))
+    expression = "*" + searchname + "*"
+    query = """select * from mm_image where imagename ~ %s"""
+    cur.execute(query, searchname)
     result = cur.fetchone()
-    disconnect_from_db(db_con, update)
-    print(result)
-    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
-        db_con = connect_to_db()
-        cur = db_con.cursor()
-        cur.execute("update mm_image set link=%s where lower(id)=lower(%s);", (newlink, imagename))
-        db_con.commit()
-        disconnect_from_db(db_con, update)
-        telegram.send_message(
-                update["message"]["chat"]["id"],
-                "Link updated!"
-                )
-    else:
-        telegram.send_message(
-                update["message"]["chat"]["id"],
-                "You didn't upload that image so you can't change it!"
-                )
+    string_list = [' '.join(item) for item in result]
+    retstring = ', '.join(string_list)
+    return retstring
 
 
 
@@ -211,37 +197,3 @@ def delete_image(imagename, update):
                 update["message"]["chat"]["id"],
                 "Only the admin is allowed to remove images!"
                 )
-
-
-
-def get_image_info(imagename, update):
-    db_con = connect_to_db()
-    cur = db_con.cursor()
-    query = """select * from mm_user where username=%s"""
-    cur.execute(query, [str(update["message"]["from"]["username"])])
-    result = cur.fetchone()
-    disconnect_from_db(db_con, update)
-    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
-        db_con = connect_to_db()
-        cur = db_con.cursor()
-        cur.execute("select * from mm_image where lower(id)=lower(%s)", [imagename])
-        result = cur.fetchone()
-        disconnect_from_db(db_con, update)
-        if result is not None:
-            img_id = str(result[0])
-            img_link = str(result[1])
-            img_uploaded_by = str(result[2])
-            telegram.send_message(
-                    update["message"]["chat"]["id"],
-                    "The image {0} was:\nUploaded by: {1}\nAnd it points to: {2}".format(img_id, img_uploaded_by, img_link)
-                    )
-        else:
-            telegram.send_message(
-                    update["message"]["chat"]["id"],
-                    "Couldn't find this image in the Databse"
-                    )
-    else:
-        telegram.send_message(
-            update["message"]["chat"]["id"],
-            "You are not allowed to do that!"
-            )
