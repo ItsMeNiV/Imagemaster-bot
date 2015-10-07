@@ -197,3 +197,37 @@ def delete_image(imagename, update):
                 update["message"]["chat"]["id"],
                 "Only the admin is allowed to remove images!"
                 )
+
+
+
+def get_image_info(imagename, update):
+    db_con = connect_to_db()
+    cur = db_con.cursor()
+    query = """select * from mm_user where username=%s"""
+    cur.execute(query, [str(update["message"]["from"]["username"])])
+    result = cur.fetchone()
+    disconnect_from_db(db_con, update)
+    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
+        db_con = connect_to_db()
+        cur = db_con.cursor()
+        cur.execute("select * from mm_image where lower(id)=lower(%s)", [imagename])
+        result = cur.fetchone()
+        disconnect_from_db(db_con, update)
+        if result is not None:
+            img_id = str(result[0])
+            img_link = str(result[1])
+            img_uploaded_by = str(result[2])
+            telegram.send_message(
+                    update["message"]["chat"]["id"],
+                    "The image {0} was:\nUploaded by: {1}\nAnd it points to: {2}".format(img_id, img_uploaded_by, img_link)
+                    )
+        else:
+            telegram.send_message(
+                    update["message"]["chat"]["id"],
+                    "Couldn't find this image in the Databse"
+                    )
+    else:
+        telegram.send_message(
+            update["message"]["chat"]["id"],
+            "You are not allowed to do that!"
+            )
