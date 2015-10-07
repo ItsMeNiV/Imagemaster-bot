@@ -151,7 +151,7 @@ def handle_search_image(update):
         "Can't find searchname. Be sure your message looks like this: \"/mm_searchimage <searchname>\""
         )
 
-def handle_get_image_info(imagename, update):
+def get_image_info(imagename, update):
     db_con = connect_to_db()
     cur = db_con.cursor()
     query = """select * from mm_user where username=%s"""
@@ -183,6 +183,18 @@ def handle_get_image_info(imagename, update):
             "You are not allowed to do that!"
             )
 
+def handle_get_imageinfo(update):
+    imagename = None
+    m = re.search('^\/mm_getimageinfo (.*?)$', update["message"]["text"])
+    imagename = m.group(1)
+    if imagename:
+        databasecon.get_image_info(imagename, update)
+    else:
+        telegram.send_message(
+            update["message"]["chat"]["id"],
+            "Can't find imagename. Be sure your message looks like this: \"/mm_getimageinfo <imagename>\""
+            )
+
 
 __handlers = {
     "help": handle_help,
@@ -193,7 +205,7 @@ __handlers = {
     "updateimagename": handle_update_imagename,
     "deleteimage": handle_delete_image,
     "handleimage": handle_search_image,
-    "getimageinfo": handle_get_image_info,
+    "getimageinfo": handle_get_imageinfo,
     "fuckyou": handle_fuckyou
 }
 
