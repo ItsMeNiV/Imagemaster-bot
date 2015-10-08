@@ -155,7 +155,8 @@ def handle_search_image(update):
 def handle_get_imageinfo(update):
     imagename = None
     m = re.search('^\/mm_getimageinfo (.*?)$', update["message"]["text"])
-    imagename = m.group(1)
+    if m:
+        imagename = m.group(1)
     if imagename:
         databasecon.get_image_info(imagename, update)
     else:
