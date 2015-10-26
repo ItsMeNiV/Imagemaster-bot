@@ -166,6 +166,27 @@ def update_imagename(oldname, newname, update):
                 "You are not allowed to do that!"
                 )
 
+def update_imagelink(imagename, newlink, update):
+    query = """select * from mm_image where uploaded_by=%s and id=%s"""
+    cur.execute(query, (str(update["message"]["from"]["username"]), imagename))
+    disconnect_from_db(db_con, update)
+    print(result)
+    if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
+        db_con = connect_to_db()
+        cur = db_con.cursor()
+        cur.execute("update mm_image set link=%s where lower(id)=lower(%s);", (newlink, imagename))
+        db_con.commit()
+        disconnect_from_db(db_con, update)
+        telegram.send_message(
+                update["message"]["chat"]["id"],
+                "Link updated!"
+                )
+    else:
+        telegram.send_message(
+                update["message"]["chat"]["id"],
+                "You didn't upload that image so you can't change it!"
+                )
+
 
 def searchimage(searchname, update):
     db_con = connect_to_db()
