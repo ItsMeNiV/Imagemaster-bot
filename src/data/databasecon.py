@@ -171,6 +171,7 @@ def update_imagelink(imagename, newlink, update):
     cur = db_con.cursor()
     query = """select * from mm_image where uploaded_by=%s and id=%s"""
     cur.execute(query, (str(update["message"]["from"]["username"]), imagename))
+    result = cur.fetchone()
     disconnect_from_db(db_con, update)
     print(result)
     if str(update["message"]["from"]["id"]) == str(os.environ["ADMIN_ID"]) or result is not None:
