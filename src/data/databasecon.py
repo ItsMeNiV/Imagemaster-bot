@@ -167,6 +167,8 @@ def update_imagename(oldname, newname, update):
                 )
 
 def update_imagelink(imagename, newlink, update):
+    db_con = connect_to_db()
+    cur = db_con.cursor()
     query = """select * from mm_image where uploaded_by=%s and id=%s"""
     cur.execute(query, (str(update["message"]["from"]["username"]), imagename))
     disconnect_from_db(db_con, update)
