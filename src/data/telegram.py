@@ -38,7 +38,7 @@ def send_photo(chat_id, image_link, image_name):
     m = re.search('^[A-Za-z0-9]*\.(.+?)$', image_name)
     if m:
         file_extension = m.group(1)
-    if file_extension == "gif":
+    if file_extension == "gif" or file_extension == "gifv":
         url = __url.format(__apikey, "sendDocument")
         sendname = str("send.{0}").format(file_extension)
         req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
@@ -49,7 +49,7 @@ def send_photo(chat_id, image_link, image_name):
         except Exception as e:
             send_message(
             chat_id,
-            "Failed to download gif"
+            "Failed to download gif/gifv"
             )
         document = open(sendname, 'rb')
         data = {'chat_id': chat_id}
@@ -77,22 +77,5 @@ def send_photo(chat_id, image_link, image_name):
             chat_id,
             "Webms aren't supported yet, so here's a link: {0}".format(image_link)
             )
-    elif file_extension == "gifv":
-        url = __url.format(__apikey, "sendVideo")
-        sendname = str("send.{0}").format(file_extension)
-        req = urllib.request.Request(image_link, headers={'User-Agent': 'Mozilla/5.0'})
-        try:
-            f = open(sendname, 'wb')
-            f.write(urllib.request.urlopen(req).read())
-            f.close()
-        except Exception as e:
-            send_message(
-            chat_id,
-            "Failed to download gifv"
-            )
-        document = open(sendname, 'rb')
-        data = {'chat_id': chat_id}
-        files = {'video': document}
-        response = requests.post(url, params=data, files=files)
     else:
         pass
