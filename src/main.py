@@ -15,7 +15,7 @@ __app.logger.setLevel(logging.ERROR)
 
 @__app.route("/", methods=["POST"])
 def main():
-    pattern = re.compile("^[A-Za-z0-9]*\.(jpg|jpeg|gif|png|webm)$")
+    pattern = re.compile("^[A-Za-z0-9]*\.(jpg|jpeg|gif|png|webm|gifv)$")
     update = request.get_json()
     if "message" in update:
         message = update["message"]
