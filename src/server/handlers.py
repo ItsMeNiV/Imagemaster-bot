@@ -81,14 +81,6 @@ def handle_unknown(update):
 
 
 
-def handle_fuckyou(update):
-    telegram.send_message(
-        update["message"]["chat"]["id"],
-        "Fuck you too!"
-        )
-
-
-
 def handle_list_images(update):
     m = re.search('^\/mm_listimages (.*?)$', update["message"]["text"])
     if m:
@@ -192,8 +184,7 @@ __handlers = {
     "updateimagelink": handle_update_imagelink,
     "deleteimage": handle_delete_image,
     "handleimage": handle_search_image,
-    "getimageinfo": handle_get_imageinfo,
-    "fuckyou": handle_fuckyou
+    "getimageinfo": handle_get_imageinfo
 }
 
 
